@@ -1,11 +1,13 @@
 'use strict';
 
 var express = require('express');
+var bodyParser = require('body-parser');
 var cfg;
 
 module.exports = function (app, _cfg, routes) {
   cfg = _cfg;
   app.use(logWho);
+  app.use(bodyParser.json());
   routes.routes(app);
   app.use(pageNotFound);
   app.use(internalServerError);

@@ -18,6 +18,7 @@ exports.hello = function (req, res, next) {
 
 exports.catcat_bot = function (req, res, next) {
   try {
+    console.log(req.body);
     var message = req.body.message;
     var updateId = req.body.update_id;
     console.log(message);
