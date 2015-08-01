@@ -4,11 +4,12 @@ var self = this;
 var cfg = null;
 var token = null;
 var TelegramBot = require('node-telegram-bot-api');
-var catcatBot = new TelegramBot(token, {polling: false});
+var catcatBot;
 
 module.exports = function (_cfg, _token) {
   cfg = _cfg;
   token = _token;
+  catcatBot = new TelegramBot(token, {polling: false});
   return self;
 };
 
