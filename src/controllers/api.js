@@ -21,19 +21,29 @@ exports.hello = function (req, res, next) {
 exports.catcat_bot = function (req, res, next) {
   try {
     var message = req.body.message;
-    if (!message || !message.text || message.text.indexOf('/cat') === 0) {
+    if (!message || !message.text) {
       console.log(req.body);
       return res.send();
     }
     //var updateId = req.body.update_id;
     //log.verbose(updateId);
     var chatId = message.chat.id;
+    if (message.text.toLowerCase().indexOf('/about') === 0) {
+      catcatBot.sendMessage(chatId, 'Type /cat to see cats photos :)\n' +
+        'Suggestions and Feedback: http://storebot.me/bot/catcat_bot \n' +
+        'Rate http://telegram.me/storebot?start=catcat_bot \n' +
+        'Yours, @catcat_bot');
+      return res.send();
+    }
+    if (message.text.toLowerCase().indexOf('/cat') !== 0) {
+      return res.send();
+    }
 
     var page = Math.floor(Math.random() * 999);
     var sorts = ["votes_count", "rating", "times_viewed", "favorites_count", "comments_count"];
     var sort = sorts[Math.floor(Math.random() * sorts.length)];
     var catUrl = "https://api.500px.com/v1/photos/search?consumer_key=VbiGx68xIs98oeeSCfWMVqOHmC4K45OBxwgaakMn&tag=cat&rpp=1&sort=" + sort + "&image_size=4&page=" + page;
-    request.get(catUrl, function(err, response) {
+    request.get(catUrl, function (err, response) {
       catcatBot.sendPhoto(chatId, JSON.parse(response.body).photos[0].image_url);//, {caption: "I'm a bot!"});
     });
 
