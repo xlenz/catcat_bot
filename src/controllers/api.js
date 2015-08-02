@@ -47,9 +47,8 @@ exports.catcat_bot = function (req, res, next) {
     request.get(catUrl, function (err, response) {
       var tmpImage = chatId + '.jpg';
       var ws = fs.createWriteStream(tmpImage);
-      var rs = fs.createReadStream(tmpImage);
       ws.on('close', function () {
-        catcatBot.sendPhoto(chatId, rs).then(function () {
+        catcatBot.sendPhoto(chatId, tmpImage).then(function () {
           fs.unlink(tmpImage);
         });
       });
