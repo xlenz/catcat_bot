@@ -50,9 +50,9 @@ exports.catcat_bot = function (req, res, next) {
       var ws = fs.createWriteStream(tmpImage);
       ws.on('close', function () {
         catcatBot.sendPhoto(chatId, tmpImage);
-        catcatBot.sendMessage(chatId, imgUrl);/*.then(function () {
+        setTimeout(function () {
           fs.unlink(tmpImage);
-        });*/
+        }, 5000);
       });
       request.get(imgUrl).pipe(ws);
     });
