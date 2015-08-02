@@ -39,20 +39,22 @@ exports.catcat_bot = function (req, res, next) {
     if (message.text.toLowerCase().indexOf('/cat') !== 0) {
       return res.send();
     }
-
+    log.info(chatId);
     var page = Math.floor(Math.random() * 999);
     var sorts = ["votes_count", "rating", "times_viewed", "favorites_count", "comments_count"];
     var sort = sorts[Math.floor(Math.random() * sorts.length)];
     var catUrl = "https://api.500px.com/v1/photos/search?consumer_key=VbiGx68xIs98oeeSCfWMVqOHmC4K45OBxwgaakMn&tag=cat&rpp=1&sort=" + sort + "&image_size=4&page=" + page;
     request.get(catUrl, function (err, response) {
+      var imgUrl = JSON.parse(response.body).photos[0].image_url;
       var tmpImage = chatId + '.jpg';
       var ws = fs.createWriteStream(tmpImage);
       ws.on('close', function () {
-        catcatBot.sendPhoto(chatId, tmpImage).then(function () {
+        catcatBot.sendPhoto(chatId, tmpImage);
+        catcatBot.sendMessage(chatId, imgUrl);/*.then(function () {
           fs.unlink(tmpImage);
-        });
+        });*/
       });
-      request(JSON.parse(response.body).photos[0].image_url).pipe(ws);
+      request.get(imgUrl).pipe(ws);
     });
 
   } catch (exception) {
