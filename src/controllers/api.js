@@ -15,7 +15,7 @@ module.exports = function (_cfg, _token) {
 };
 
 exports.hello = function (req, res, next) {
-  return res.send('This is @catcat_bot api server. Please find us in telegram. v002');
+  return res.send('This is @catcat_bot api server. Please find us in telegram. v003');
 };
 
 exports.catcat_bot = function (req, res, next) {
