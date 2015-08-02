@@ -1,5 +1,5 @@
 'use strict';
-var request = require("request");
+var request = require('request');
 var TelegramBot = require('node-telegram-bot-api');
 
 var self = this;
@@ -30,8 +30,8 @@ exports.catcat_bot = function (req, res, next) {
     var chatId = message.chat.id;
     if (message.text.toLowerCase().indexOf('/about') === 0) {
       catcatBot.sendMessage(chatId, 'Type /cat to see cats photos :)\n' +
-        'Suggestions and Feedback: http://storebot.me/bot/catcat_bot \n' +
-        'Rate http://telegram.me/storebot?start=catcat_bot \n' +
+        'Suggestions and Feedback: storebot.me/bot/catcat_bot \n' +
+        'Rate telegram.me/storebot?start=catcat_bot \n' +
         'Yours, @catcat_bot');
       return res.send();
     }
@@ -44,7 +44,11 @@ exports.catcat_bot = function (req, res, next) {
     var sort = sorts[Math.floor(Math.random() * sorts.length)];
     var catUrl = "https://api.500px.com/v1/photos/search?consumer_key=VbiGx68xIs98oeeSCfWMVqOHmC4K45OBxwgaakMn&tag=cat&rpp=1&sort=" + sort + "&image_size=4&page=" + page;
     request.get(catUrl, function (err, response) {
-      catcatBot.sendPhoto(chatId, JSON.parse(response.body).photos[0].image_url);//, {caption: "I'm a bot!"});
+      catcatBot.sendMessage(chatId, JSON.parse(response.body).photos[0].image_url);
+      request.get(JSON.parse(response.body).photos[0].image_url, function (errPhoto, photo) {
+        catcatBot.sendPhoto(chatId, photo.body);//, {caption: "I'm a bot!"});
+      });
+      catcatBot.sendPhoto(chatId, request.get(JSON.parse(response.body).photos[0].image_url));
     });
 
   } catch (exception) {
