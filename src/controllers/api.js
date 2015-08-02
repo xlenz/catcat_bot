@@ -1,6 +1,7 @@
 'use strict';
 var request = require('request');
 var TelegramBot = require('node-telegram-bot-api');
+var Stream = require('stream');
 
 var self = this;
 var cfg = null;
@@ -44,11 +45,21 @@ exports.catcat_bot = function (req, res, next) {
     var sort = sorts[Math.floor(Math.random() * sorts.length)];
     var catUrl = "https://api.500px.com/v1/photos/search?consumer_key=VbiGx68xIs98oeeSCfWMVqOHmC4K45OBxwgaakMn&tag=cat&rpp=1&sort=" + sort + "&image_size=4&page=" + page;
     request.get(catUrl, function (err, response) {
-      catcatBot.sendMessage(chatId, JSON.parse(response.body).photos[0].image_url);
-      request.get(JSON.parse(response.body).photos[0].image_url, function (errPhoto, responsePhoto, bodyPhoto) {
-        catcatBot.sendPhoto(chatId, bodyPhoto, {caption: "body"});//, {caption: "I'm a bot!"});
-      });
-      catcatBot.sendPhoto(chatId, request.get(JSON.parse(response.body).photos[0].image_url).pipe, {caption: "pipe"});
+      //catcatBot.sendMessage(chatId, JSON.parse(response.body).photos[0].image_url);
+      var writableStream = new Stream();
+      writableStream.writable = true;
+      writableStream.bytes = 0;
+
+      writableStream.write = function (buf) {
+        this.bytes += buf.length;
+      };
+
+      writableStream.end = function (buf) {
+        if (arguments.length) this.write(buf);
+        this.writable = false;
+        catcatBot.sendPhoto(chatId, this);
+      };
+      request('http://google.com/doodle.png').pipe(writableStream);
     });
 
   } catch (exception) {
