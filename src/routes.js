@@ -1,7 +1,7 @@
 'use strict';
 
 var self = this;
-var token = '91219955:AAEIbiz947It9VaFEyvjelh0ni7lELYZqLc';
+var token = '91219955:AAGpDWI63GTZRLXWy7G1rmKA5NctGRRG2vQ';
 var api;
 
 module.exports = function (cfg) {
