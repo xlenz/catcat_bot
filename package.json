@@ -1,6 +1,5 @@
 {
   "name": "catcat_bot",
-  "version": "1.0.0",
   "description": "",
   "main": "server.js",
   "scripts": {
@@ -18,10 +17,10 @@
   },
   "homepage": "https://github.com/xlenz/catcat_bot#readme",
   "dependencies": {
-    "body-parser": "^1.13.3",
-    "express": "^4.13.2",
-    "node-telegram-bot-api": "^0.11.1",
-    "request": "^2.60.0",
-    "winston": "^1.0.1"
+    "body-parser": "^1.15.0",
+    "express": "^4.13.4",
+    "node-telegram-bot-api": "^0.20.1",
+    "request": "^2.69.0",
+    "winston": "^2.2.0"
   }
 }
