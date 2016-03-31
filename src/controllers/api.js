@@ -1,6 +1,7 @@
 'use strict';
 var request = require('request');
 var TelegramBot = require('node-telegram-bot-api');
+var fs = require('fs');
 
 var self = this;
 var cfg = null;
@@ -44,8 +45,18 @@ exports.catcat_bot = function (req, res, next) {
     var sort = sorts[Math.floor(Math.random() * sorts.length)];
     var catUrl = "https://api.500px.com/v1/photos/search?consumer_key=VbiGx68xIs98oeeSCfWMVqOHmC4K45OBxwgaakMn&tag=cat&rpp=1&sort=" + sort + "&image_size=4&page=" + page;
     request.get(catUrl, function (err, response) {
-      var imgUrl = JSON.parse(response.body).photos[0].image_url;
-      request.get(imgUrl).pipe(catcatBot.sendPhoto(chatId));
+      var photoObj = JSON.parse(response.body).photos[0];
+      var imgUrl = photoObj.image_url;
+      var imgId = photoObj.id;
+      var imgName = 'img-' + imgId + '-' + chatId + '.jpg';
+      var fsStream = fs.createWriteStream(imgName);
+      fsStream.on('close', function() {
+        catcatBot.sendPhoto(chatId, imgName).then(function() {
+          fs.unlink(imgName);
+        });
+      });
+
+      request.get(imgUrl).pipe(fsStream);
     });
 
   } catch (exception) {
