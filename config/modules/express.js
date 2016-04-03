@@ -15,7 +15,7 @@ module.exports = function (app, _cfg, routes) {
 
 function logWho(req, res, next) {
   var who = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-  log.verbose(who + ' req: ' + req.headers.host + req.url);
+  //log.verbose(who + ' req: ' + req.headers.host + req.url);
   next();
 }
 
